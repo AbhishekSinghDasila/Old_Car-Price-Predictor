@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚗 Car Price Predictor - AI Powered</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #7e22ce 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Animated car background */
+        .car-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.05;
+            z-index: 0;
+            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y="50" font-size="40">🚗</text></svg>');
+            background-size: 100px;
+            animation: floatCars 60s linear infinite;
+        }
+
+        @keyframes floatCars {
+            from { background-position: 0 0; }
+            to { background-position: 1000px 1000px; }
+        }
+
+        /* Floating gradient orbs */
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.3;
+            z-index: 0;
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .orb1 {
+            width: 300px;
+            height: 300px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            top: -100px;
+            left: -100px;
+        }
+
+        .orb2 {
+            width: 400px;
+            height: 400px;
+            background: linear-gradient(45deg, #f093fb, #f5576c);
+            bottom: -150px;
+            right: -150px;
+            animation-delay: -10s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(50px, 50px) rotate(90deg); }
+            50% { transform: translate(0, 100px) rotate(180deg); }
+            75% { transform: translate(-50px, 50px) rotate(270deg); }
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 30px;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.4);
+            max-width: 650px;
+            width: 100%;
+            padding: 50px;
+            position: relative;
+            z-index: 1;
+            animation: slideIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .car-icon {
+            font-size: 5em;
+            margin-bottom: 10px;
+            animation: bounce 2s infinite;
+            display: inline-block;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        h1 {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            font-size: 2.8em;
+            font-weight: 700;
+            letter-spacing: -1px;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 10px;
+            font-size: 1em;
+            font-weight: 300;
+        }
+
+        .badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 0.85em;
+            font-weight: 600;
+            margin-top: 10px;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: #333;
+            font-weight: 600;
+            font-size: 0.95em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .label-icon {
+            font-size: 1.2em;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e8e8e8;
+            border-radius: 15px;
+            font-size: 16px;
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            background: #f8f9fa;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+            transform: translateY(-2px);
+        }
+
+        select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="8" viewBox="0 0 12 8"><path fill="%23667eea" d="M6 8L0 0h12z"/></svg>');
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+            padding-right: 40px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.5);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn:disabled {
+            background: linear-gradient(135deg, #ccc, #999);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .result {
+            margin-top: 35px;
+            padding: 35px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            display: none;
+            animation: resultPop 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            box-shadow: 0 20px 50px rgba(102, 126, 234, 0.4);
+        }
+
+        @keyframes resultPop {
+            from {
+                opacity: 0;
+                transform: scale(0.8) rotateX(90deg);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) rotateX(0);
+            }
+        }
+
+        .result.show {
+            display: block;
+        }
+
+        .price-label {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 0.95em;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .price {
+            font-size: 3.2em;
+            font-weight: 800;
+            color: white;
+            text-align: center;
+            margin-bottom: 25px;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            letter-spacing: -1px;
+        }
+
+        .car-details {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            color: white;
+        }
+
+        .car-details p {
+            margin: 12px 0;
+            font-size: 1em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .detail-icon {
+            font-size: 1.3em;
+        }
+
+        .error {
+            background: linear-gradient(135deg, #ff4757, #ff6348);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 25px;
+            display: none;
+            animation: shake 0.5s ease-out;
+            box-shadow: 0 10px 30px rgba(255, 71, 87, 0.4);
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-10px); }
+            20%, 40%, 60%, 80% { transform: translateX(10px); }
+        }
+
+        .error.show {
+            display: block;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            margin-top: 25px;
+        }
+
+        .loading.show {
+            display: block;
+        }
+
+        .spinner {
+            border: 5px solid rgba(102, 126, 234, 0.2);
+            border-top: 5px solid #667eea;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            color: #667eea;
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+
+        /* Responsive design */
+        @media (max-width: 700px) {
+            .container {
+                padding: 30px 25px;
+            }
+            
+            h1 {
+                font-size: 2.2em;
+            }
+            
+            .car-icon {
+                font-size: 4em;
+            }
+            
+            .price {
+                font-size: 2.5em;
+            }
+
+            input, select {
+                padding: 12px 15px;
+                font-size: 15px;
+            }
+        }
+
+        /* Pulse animation for button */
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4); }
+            50% { box-shadow: 0 10px 40px rgba(102, 126, 234, 0.7); }
+        }
+
+        .btn {
+            animation: pulse 2s infinite;
+        }
+
+        .btn:hover {
+            animation: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="orb orb1"></div>
+    <div class="orb orb2"></div>
+    <div class="car-background"></div>
+
+    <div class="container">
+        <div class="header">
+            <div class="car-icon">🚗</div>
+            <h1>Car Price Predictor</h1>
+            <p class="subtitle">Get instant AI-powered price predictions</p>
+            <span class="badge">🤖 ML Powered</span>
+        </div>
+
+        <form id="predictionForm">
+            <div class="form-group">
+                <label for="company">
+                    <span class="label-icon">🏢</span>
+                    Select Company
+                </label>
+                <select id="company" name="company" required>
+                    <option value="">-- Choose Company --</option>
+                    {% for company in companies %}
+                    <option value="{{ company }}">{{ company }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="model">
+                    <span class="label-icon">🚙</span>
+                    Select Model
+                </label>
+                <select id="model" name="model" required disabled>
+                    <option value="">-- First select company --</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="year">
+                    <span class="label-icon">📅</span>
+                    Manufacturing Year
+                </label>
+                <input type="number" id="year" name="year" 
+                       min="2000" max="2026" 
+                       placeholder="e.g., 2020" required>
+            </div>
+
+            <div class="form-group">
+                <label for="kms_driven">
+                    <span class="label-icon">🛣️</span>
+                    Kilometers Driven
+                </label>
+                <input type="number" id="kms_driven" name="kms_driven" 
+                       min="0" step="1000"
+                       placeholder="e.g., 45000" required>
+            </div>
+
+            <div class="form-group">
+                <label for="fuel_type">
+                    <span class="label-icon">⛽</span>
+                    Fuel Type
+                </label>
+                <select id="fuel_type" name="fuel_type" required>
+                    <option value="">-- Choose Fuel Type --</option>
+                    {% for fuel in fuel_types %}
+                    <option value="{{ fuel }}">{{ fuel }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <button type="submit" class="btn" id="predictBtn">
+                🔮 Predict Price Now
+            </button>
+        </form>
+
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p class="loading-text">🧠 AI is calculating...</p>
+        </div>
+
+        <div class="error" id="error"></div>
+
+        <div class="result" id="result">
+            <p class="price-label">💰 Estimated Price</p>
+            <div class="price" id="predictedPrice"></div>
+            <div class="car-details" id="carDetails"></div>
+        </div>
+    </div>
+
+    <script>
+        // Car models data passed from Flask
+        const carModels = {{ car_models|tojson }};
+
+        // Company selection change handler
+        document.getElementById('company').addEventListener('change', function() {
+            const company = this.value;
+            const modelSelect = document.getElementById('model');
+            
+            // Clear previous options
+            modelSelect.innerHTML = '<option value="">-- Choose Model --</option>';
+            
+            if (company && carModels[company]) {
+                modelSelect.disabled = false;
+                // Sort models alphabetically
+                const sortedModels = carModels[company].sort();
+                sortedModels.forEach(model => {
+                    const option = document.createElement('option');
+                    option.value = model;
+                    option.textContent = model;
+                    modelSelect.appendChild(option);
+                });
+            } else {
+                modelSelect.disabled = true;
+            }
+        });
+
+        // Form submission handler
+        document.getElementById('predictionForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // Hide previous results/errors
+            document.getElementById('result').classList.remove('show');
+            document.getElementById('error').classList.remove('show');
+            
+            // Show loading
+            document.getElementById('loading').classList.add('show');
+            document.getElementById('predictBtn').disabled = true;
+            
+            // Collect form data
+            const formData = {
+                company: document.getElementById('company').value,
+                model: document.getElementById('model').value,
+                year: document.getElementById('year').value,
+                kms_driven: document.getElementById('kms_driven').value,
+                fuel_type: document.getElementById('fuel_type').value
+            };
+            
+            try {
+                // Make API call
+                const response = await fetch('/predict', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                const data = await response.json();
+                
+                // Hide loading
+                document.getElementById('loading').classList.remove('show');
+                document.getElementById('predictBtn').disabled = false;
+                
+                if (data.success) {
+                    // Show result
+                    document.getElementById('predictedPrice').textContent = data.predicted_price;
+                    document.getElementById('carDetails').innerHTML = `
+                        <p><span class="detail-icon">🚗</span> <strong>Car:</strong> ${data.car_details.name}</p>
+                        <p><span class="detail-icon">📅</span> <strong>Year:</strong> ${data.car_details.year}</p>
+                        <p><span class="detail-icon">🛣️</span> <strong>Kms Driven:</strong> ${data.car_details.kms}</p>
+                        <p><span class="detail-icon">⛽</span> <strong>Fuel Type:</strong> ${data.car_details.fuel}</p>
+                    `;
+                    document.getElementById('result').classList.add('show');
+                } else {
+                    // Show error
+                    document.getElementById('error').textContent = '❌ ' + data.error;
+                    document.getElementById('error').classList.add('show');
+                }
+                
+            } catch (error) {
+                document.getElementById('loading').classList.remove('show');
+                document.getElementById('predictBtn').disabled = false;
+                document.getElementById('error').textContent = '❌ Connection error. Please try again.';
+                document.getElementById('error').classList.add('show');
+            }
+        });
+    </script>
+</body>
+</html>
