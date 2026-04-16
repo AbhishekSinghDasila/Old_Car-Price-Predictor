@@ -1,4 +1,4 @@
-# Car Price Predictor Web App 🚗
+## Car Price Predictor Web App 🚗
 
 A beautiful, interactive Flask web application to predict car prices using your ML model.
 
