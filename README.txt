@@ -98,22 +98,3 @@ background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 **Port already in use?**
 - Change the port in `app.py`: `app.run(debug=True, port=5001)`
 
-## For Interviews 💼
-
-This project demonstrates:
-- ✅ End-to-end ML deployment
-- ✅ Flask REST API development
-- ✅ Frontend-backend integration
-- ✅ Error handling and validation
-- ✅ Professional UI/UX design
-- ✅ Production-ready code structure
-
-## Next Steps 🚀
-
-1. Deploy on Heroku/AWS/Azure
-2. Add model performance metrics
-3. Implement data visualization
-4. Add user authentication
-5. Store predictions in database
-
-Good luck with your interviews! 🎯
